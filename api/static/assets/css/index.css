@@ -1,20 +1,25 @@
+/* Default Dark Theme */
 body {
 	font-family: Arial, sans-serif;
 	margin: 20px;
 	padding: 0;
+	background-color: #121212;
+	color: #e0e0e0;
 }
 
 table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
+	background-color: #1e1e1e;
 }
 
 th,
 td {
-	border: 1px solid #ddd;
+	border: 1px solid #444;
 	padding: 10px;
 	text-align: left;
+	color: #e0e0e0;
 }
 
 td.pdf-link {
@@ -29,10 +34,36 @@ td.pdf-link {
 }
 
 th {
-	background-color: #f4f4f4;
+	background-color: #222;
 }
 
 a {
-	color: green;
+	color: #90ee90;
 	text-decoration: none;
+}
+
+/* Light Theme (Only When User Prefers It) */
+@media (prefers-color-scheme: light) {
+	body {
+		background-color: #ffffff;
+		color: #333;
+	}
+
+	table {
+		background-color: #fff;
+	}
+
+	th,
+	td {
+		border: 1px solid #ddd;
+		color: #333;
+	}
+
+	th {
+		background-color: #f4f4f4;
+	}
+
+	a {
+		color: green;
+	}
 }
