@@ -4,54 +4,31 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Exam Notifications</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 20px;
-			padding: 0;
-		}
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 20px;
-		}
-
-		th,
-		td {
-			border: 1px solid #ddd;
-			padding: 10px;
-			text-align: left;
-		}
-
-		th {
-			background-color: #f4f4f4;
-		}
-
-		a {
-			color: green;
-			text-decoration: none;
-		}
-	</style>
+	<title>Kerala University B.Tech Notifications</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/index.css') }}">
+	<script rel="stylesheet" src="{{ url_for('static', filename='assets/js/fontawesome.js') }}"></script>
 </head>
 
 <body>
 
-	<h2>Exam Notifications</h2>
+	<h2>KU B.Tech Notifications</h2>
 
 	<table>
 		<thead>
 			<tr>
 				<th>Description</th>
-				<th>PDF Link</th>
+				<th>PDF</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for row in data %}
 			<tr>
 				<td>{{ row.description }}</td>
-				<td><a href="{{ row.pdf_link }}" target="_blank">Download PDF</a></td>
+				<td class="pdf-link">
+					<a href="{{ row.pdf_link }}" target="_blank">
+						<i class="fa-solid fa-file-arrow-down"></i>
+					</a>
+				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
