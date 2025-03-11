@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Exam Notifications</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+			padding: 0;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 10px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #f4f4f4;
+		}
+
+		a {
+			color: green;
+			text-decoration: none;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h2>Exam Notifications</h2>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>PDF Link</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for row in data %}
+			<tr>
+				<td>{{ row.description }}</td>
+				<td><a href="{{ row.pdf_link }}" target="_blank">Download PDF</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+</body>
+
+</html>
