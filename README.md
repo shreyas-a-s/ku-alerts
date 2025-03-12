@@ -1,12 +1,16 @@
 # KU B.Tech Notifications
 
-This is a project aimed at simplifying the notification viewing experience of b.tech students from kerala university.
+This is a project aimed at simplifying the notification viewing experience of B.tech students from Kerala University.
 
 This is a website that runs using Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python). It can also be run locally for testing ang checking it out.
 
 ## How it Works
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+It scrapes the University website's [notifications](https://exams.keralauniversity.ac.in/Login/check1) page using [soup](https://pypi.org/project/beautifulsoup4/), which is a python library that enables easy scraping of html webpages.
+
+It parses the table of notifications to find the latest notifications that contain the string `B.Tech` and it lists them using a neat-looking table which also contains a link to download each of those notifications.
+
+For hosting this website,I used the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
 
 ## Installing python dependencies
 
@@ -18,10 +22,9 @@ pip install -r requirements.txt
 
 
 ## Running Locally
-
 ```bash
 # Using python
-python3 api/app.py
+python3 api/index.py
 
 # Using node
 npm i -g vercel
