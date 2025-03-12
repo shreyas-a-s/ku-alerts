@@ -30,6 +30,27 @@ def extract_tables(url):
     return matching_rows
 
 
+def extract_semester_num(description):
+    number_map = {
+        "first": 1,
+        "second": 2,
+        "third": 3,
+        "fourth": 4,
+        "fifth": 5,
+        "sixth": 6,
+        "seventh": 7,
+        "eighth": 8,
+        "ninth": 9,
+    }
+
+    words = description.lower().split()
+    for word in words:
+        if word in number_map:
+            return number_map[word]  # Return first detected number
+
+    return None  # No number found
+
+
 def process_data(tables_data):
     final_variable = []
     current_published_date = None
@@ -58,14 +79,28 @@ def process_data(tables_data):
             # For rows with just one <td> (description only)
             if len(tds) == 1:
                 description = tds[0].get_text(strip=True)
-                notifications.append({"description": description, "pdf_link": None})
+                semester_num = extract_semester_num(description)
+                notifications.append(
+                    {
+                        "description": description,
+                        "semester_num": semester_num,
+                        "pdf_link": None,
+                    }
+                )
             elif (
                 len(tds) >= 2
             ):  # For rows with at least two <td> elements (description and pdf link)
                 description = tds[1].get_text(strip=True)
+                semester_num = extract_semester_num(description)
                 link_tag = tds[2].find("a")  # Find <a> inside the last <td>
                 pdf_link = link_tag["href"] if link_tag else None
-                notifications.append({"description": description, "pdf_link": pdf_link})
+                notifications.append(
+                    {
+                        "description": description,
+                        "semester_num": semester_num,
+                        "pdf_link": pdf_link,
+                    }
+                )
 
     # Don't forget to append the last set of notifications after the loop
     if current_published_date:

@@ -22,8 +22,8 @@ td {
 	color: #e0e0e0;
 }
 
-td.pdf-link {
-	padding: 1px;
+td.pdf-link,
+td.semester-num {
 	text-align: center;
 }
 

@@ -21,6 +21,7 @@
 		<thead>
 			<tr>
 				<th>Published</th>
+				<th>Sem</th>
 				<th>Description</th>
 				<th>PDF</th>
 			</tr>
@@ -34,6 +35,7 @@
 							{% if loop.first %}
 								<td rowspan="{{ row_count }}">{{ item.published_date }}</td>
 							{% endif %}
+							<td class="semester-num">{{ notification.semester_num }}</td>
 							<td>{{ notification.description }}</td>
 							<td class="pdf-link">
 								{% if notification.pdf_link %}
