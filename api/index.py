@@ -19,43 +19,72 @@ def extract_tables(url):
     # Define substring to search for
     search_text = "B.Tech"
 
-    # Find all <tr> elements that contain a <td> with the substring "Fruit"
+    # Find all <tr> elements that either contain the substring "Tech" or have a class of "tableHeading"
     matching_rows = [
         tr
         for tr in soup.find_all("tr")
         if any(search_text in td.text for td in tr.find_all("td"))
+        or "tableHeading" in tr.get("class", [])
     ]
 
     return matching_rows
 
 
-# Example Usage
+def process_data(tables_data):
+    final_variable = []
+    current_published_date = None
+    notifications = []
+
+    for tr in tables_data:
+        # Check if the row is a table heading (contains the published date)
+        if "tableHeading" in tr.get("class", []):
+            # If there is an existing group of notifications, save them
+            if current_published_date:
+                final_variable.append(
+                    {
+                        "published_date": current_published_date,
+                        "notifications": notifications,
+                    }
+                )
+
+            # Extract the published date from the first <td>
+            published_date = tr.find("td").get_text(strip=True).split()[2]
+            current_published_date = published_date
+            notifications = []  # Reset the notifications for the new published date
+        else:
+            # Process rows with notification data
+            tds = tr.find_all("td")
+
+            # For rows with just one <td> (description only)
+            if len(tds) == 1:
+                description = tds[0].get_text(strip=True)
+                notifications.append({"description": description, "pdf_link": None})
+            elif (
+                len(tds) >= 2
+            ):  # For rows with at least two <td> elements (description and pdf link)
+                description = tds[1].get_text(strip=True)
+                link_tag = tds[2].find("a")  # Find <a> inside the last <td>
+                pdf_link = link_tag["href"] if link_tag else None
+                notifications.append({"description": description, "pdf_link": pdf_link})
+
+    # Don't forget to append the last set of notifications after the loop
+    if current_published_date:
+        final_variable.append(
+            {"published_date": current_published_date, "notifications": notifications}
+        )
+
+    return final_variable
+
+
 url = "https://exams.keralauniversity.ac.in/Login/check1"
 tables_data = extract_tables(url)
-
-data = []
-
-for tr in tables_data:
-    tds = tr.find_all("td")  # Get all <td> elements
-
-    if (
-        len(tds) >= 2
-    ):  # Ensure there are at least 2 <td> elements (description and link)
-        description = tds[1].get_text(strip=True)  # Extract text from the second <td>
-        link_tag = tds[2].find("a")  # Find <a> inside the last <td>
-        pdf_link = link_tag["href"] if link_tag else None  # Extract href from <a>
-
-        data.append({"description": description, "pdf_link": pdf_link})
-
-# Convert to JSON string (optional)
-json_data = json.dumps(data, indent=4)
+final_variable = process_data(tables_data)
 
 
 @app.route("/")
 def index():
-    return render_template("table.html", data=data)
+    return render_template("table.html", data=final_variable)
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-

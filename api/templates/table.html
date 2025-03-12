@@ -20,20 +20,33 @@
 	<table>
 		<thead>
 			<tr>
+				<th>Published</th>
 				<th>Description</th>
 				<th>PDF</th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for row in data %}
-			<tr>
-				<td>{{ row.description }}</td>
-				<td class="pdf-link">
-					<a href="{{ row.pdf_link }}" target="_blank">
-						<i class="fa-solid fa-file-arrow-down"></i>
-					</a>
-				</td>
-			</tr>
+			{% for item in data %}
+				{% if item.notifications %}
+					{% set row_count = item.notifications|length %}
+					{% for notification in item.notifications %}
+						<tr>
+							{% if loop.first %}
+								<td rowspan="{{ row_count }}">{{ item.published_date }}</td>
+							{% endif %}
+							<td>{{ notification.description }}</td>
+							<td class="pdf-link">
+								{% if notification.pdf_link %}
+									<a href="{{ notification.pdf_link }}" target="_blank">
+										<i class="fa-solid fa-file-arrow-down"></i>
+									</a>
+								{% else %}
+									N/A
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				{% endif %}
 			{% endfor %}
 		</tbody>
 	</table>
