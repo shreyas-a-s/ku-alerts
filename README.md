@@ -8,19 +8,22 @@ This is a website that runs using Flask 3 on Vercel with Serverless Functions us
 
 This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
 
-## Running Locally
+## Installing python dependencies
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python3 api/app.py
 ```
 
 
-## Running Locally (using vercel package)
+## Running Locally
 
 ```bash
+# Using python
+python3 api/app.py
+
+# Using node
 npm i -g vercel
 vercel dev
 ```
