@@ -70,6 +70,7 @@ def process_data(tables_data):
 
             # Extract the published date from the first <td>
             published_date = tr.find("td").get_text(strip=True).split()[2]
+            published_date = published_date[:-4] + published_date[-2:]
             current_published_date = published_date
             notifications = []  # Reset the notifications for the new published date
         else:

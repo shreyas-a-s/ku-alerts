@@ -20,7 +20,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Published</th>
+				<th>Date</th>
 				<th>Sem</th>
 				<th>Description</th>
 				<th>PDF</th>
@@ -33,7 +33,7 @@
 					{% for notification in item.notifications %}
 						<tr>
 							{% if loop.first %}
-								<td rowspan="{{ row_count }}">{{ item.published_date }}</td>
+								<td class="publised-date" rowspan="{{ row_count }}">{{ item.published_date }}</td>
 							{% endif %}
 							<td class="semester-num">{{ notification.semester_num }}</td>
 							<td>{{ notification.description }}</td>

@@ -18,11 +18,19 @@ th,
 td {
 	border: 1px solid #444;
 	padding: 10px;
-	text-align: left;
 	color: #e0e0e0;
 }
 
+td {
+	text-align: left;
+}
+
+th {
+	text-align: center;
+}
+
 td.pdf-link,
+td.publised-date,
 td.semester-num {
 	text-align: center;
 }
