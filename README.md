@@ -12,7 +12,7 @@ It parses the table of notifications to find the latest notifications that conta
 
 For hosting this website, I have used the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions. This means I am able to run backend code (python) *without* the need for a server, which is pretty cool.
 
-## Installing python dependencies
+## Installing dependencies
 
 ```bash
 python3 -m venv .venv

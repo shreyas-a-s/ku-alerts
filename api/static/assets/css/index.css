@@ -46,13 +46,7 @@ td.pdf-link {
 }
 
 #semester-heading::before {
-	content: "Semester";
-}
-
-@media (max-width: 778px) {
-	#semester-heading::before {
-		content: "Sem";
-	}
+	content: "Sem";
 }
 
 @media (max-width: 576px) {
