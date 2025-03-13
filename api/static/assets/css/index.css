@@ -85,6 +85,10 @@ td.pdf-link {
 	}
 }
 
+td.description {
+	word-break: break-word;
+}
+
 #semester-heading::before {
 	content: "Sem";
 }
