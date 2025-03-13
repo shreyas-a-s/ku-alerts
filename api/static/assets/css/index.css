@@ -30,9 +30,35 @@ th {
 }
 
 td.pdf-link,
-td.publised-date,
+td.published-date,
 td.semester-num {
 	text-align: center;
+}
+
+td.pdf-link {
+	padding: 0;
+}
+
+@media (min-width: 778px) {
+	td.published-date::after {
+		content: attr(data-published-year);
+	}
+}
+
+#semester-heading::before {
+	content: "Semester";
+}
+
+@media (max-width: 778px) {
+	#semester-heading::before {
+		content: "Sem";
+	}
+}
+
+@media (max-width: 576px) {
+	#semester-heading::before {
+		content: "S";
+	}
 }
 
 .pdf-link a {

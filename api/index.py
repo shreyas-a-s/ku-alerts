@@ -64,14 +64,17 @@ def process_data(tables_data):
                 final_variable.append(
                     {
                         "published_date": current_published_date,
+                        "published_year": current_published_year,
                         "notifications": notifications,
                     }
                 )
 
             # Extract the published date from the first <td>
             published_date = tr.find("td").get_text(strip=True).split()[2]
-            published_date = published_date[:-4] + published_date[-2:]
+            published_date = published_date[:-5]
+            published_year = f"/{published_date[-2:]}"
             current_published_date = published_date
+            current_published_year = published_year
             notifications = []  # Reset the notifications for the new published date
         else:
             # Process rows with notification data
