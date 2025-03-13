@@ -12,26 +12,15 @@ It parses the table of notifications to find the latest notifications that conta
 
 For hosting this website, I have used the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions. This means I am able to run backend code (python) *without* the need for a server, which is pretty cool.
 
-## Installing dependencies
-
+## Running Locally
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-
-## Running Locally
-```bash
-# Using python
 python3 api/index.py
-
-# Using node
-npm i -g vercel
-vercel dev
 ```
 
-Your Flask application is now available at `http://localhost:3000`.
+The website is now available at `http://localhost:5000`
 
 ## One-Click Deploy
 
