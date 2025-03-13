@@ -4,8 +4,25 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+url = "https://exams.keralauniversity.ac.in/Login/check1"
+tables_data = extract_tables(url)
+final_variable = process_data(tables_data)
+course_map = {
+    "btech": "B.Tech",
+    "mtech": "M.Tech",
+    "ba": "B.A.",
+    "bcom": "B.Com.",
+}
 
-def extract_tables(url):
+
+def convert_course_string(course):
+    if course.lower() in course_map:
+        return course_map[course.lower()]
+
+    return ""
+
+
+def extract_tables(url, course=""):
     # Fetch webpage content
     response = requests.get(url)
     if response.status_code != 200:
@@ -14,14 +31,11 @@ def extract_tables(url):
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    # Define substring to search for
-    search_text = "B.Tech"
-
-    # Find all <tr> elements that either contain the substring "Tech" or have a class of "tableHeading"
+    # Find all <tr> elements that either contain the substring "course" or have a class of "tableHeading"
     matching_rows = [
         tr
         for tr in soup.find_all("tr")
-        if any(search_text in td.text for td in tr.find_all("td"))
+        if any(course in td.text for td in tr.find_all("td"))
         or "tableHeading" in tr.get("class", [])
     ]
 
@@ -113,14 +127,21 @@ def process_data(tables_data):
     return final_variable
 
 
-url = "https://exams.keralauniversity.ac.in/Login/check1"
-tables_data = extract_tables(url)
-final_variable = process_data(tables_data)
-
-
 @app.route("/")
 def index():
-    return render_template("table.html", data=final_variable)
+    return render_template(
+        "table.html", data=final_variable, course=None, course_map=course_map
+    )
+
+
+@app.route("/course/<course>")
+def show_course_notifications(course):
+    course_string = convert_course_string(course)
+    tables_data = extract_tables(url, course_string)
+    final_variable = process_data(tables_data)
+    return render_template(
+        "table.html", data=final_variable, course=course, course_map=course_map
+    )
 
 
 if __name__ == "__main__":

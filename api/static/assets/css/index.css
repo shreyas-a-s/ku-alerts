@@ -7,6 +7,46 @@ body {
 	color: #e0e0e0;
 }
 
+h2 {
+	margin: 0;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.dropdown-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.styled-select {
+	padding: 10px 35px 10px 15px;
+	font-size: 16px;
+	border: 1px solid #444;
+	color: white;
+	outline: none;
+	appearance: none;
+	cursor: pointer;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%2390ee90' d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	background-size: 14px;
+	background-color: #121212;
+}
+
+.styled-select:hover {
+	border-color: #90ee90;
+}
+
+.styled-select:focus {
+	border-color: #90ee90;
+	box-shadow: 0 0 5px #90ee90;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;
