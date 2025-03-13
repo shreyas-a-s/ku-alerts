@@ -58,7 +58,7 @@ def extract_semester_num(description):
         if word in number_map:
             return number_map[word]  # Return first detected number
 
-    return None  # No number found
+    return "-"
 
 
 def process_data(tables_data):
