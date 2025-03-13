@@ -67,6 +67,12 @@ td.pdf-link {
 	text-align: center;
 }
 
+.pdf-link svg {
+	width: 25px;
+	height: 25px;
+	fill: #90ee90;
+}
+
 th {
 	background-color: #222;
 }
