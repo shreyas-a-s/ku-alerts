@@ -5,8 +5,6 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 url = "https://exams.keralauniversity.ac.in/Login/check1"
-tables_data = extract_tables(url)
-final_variable = process_data(tables_data)
 course_map = {
     "btech": "B.Tech",
     "mtech": "M.Tech",
@@ -125,6 +123,10 @@ def process_data(tables_data):
         )
 
     return final_variable
+
+
+tables_data = extract_tables(url)
+final_variable = process_data(tables_data)
 
 
 @app.route("/")
