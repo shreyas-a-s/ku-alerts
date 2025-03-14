@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template
 
 app = Flask(__name__)
 
@@ -8,8 +8,22 @@ url = "https://exams.keralauniversity.ac.in/Login/check1"
 course_map = {
     "btech": "B.Tech",
     "mtech": "M.Tech",
-    "ba": "B.A.",
-    "bcom": "B.Com.",
+    "bsc": "B.Sc",
+    "msc": "M.Sc",
+    "ba": "B.A",
+    "bdes": "B.Des",
+    "bca": "BCA",
+    "mca": "MCA",
+    "bfa": "BFA",
+    "bba": "BBA",
+    "mba": "MBA",
+    "bcom": "B.Com",
+    "mcom": "M.Com",
+    "msw": "MSW",
+    "bhm": "BHM",
+    "llb": "LL.B",
+    "llm": "LLM",
+    "mlisc": "M.L.I.Sc",
 }
 
 
@@ -20,7 +34,7 @@ def convert_course_string(course):
     return ""
 
 
-def extract_tables(url, course=""):
+def extract_rows(url):
     # Fetch webpage content
     response = requests.get(url)
     if response.status_code != 200:
@@ -29,12 +43,25 @@ def extract_tables(url, course=""):
 
     soup = BeautifulSoup(response.text, "html.parser")
 
+    # Find all the tr inside the div with id 'wrapper'
+    tr_list = soup.find("div", id="wrapper").find_all("tr")
+
+    return tr_list
+
+
+def search_course(tr_list, course=""):
+
     # Find all <tr> elements that either contain the substring "course" or have a class of "tableHeading"
     matching_rows = [
         tr
-        for tr in soup.find_all("tr")
-        if any(course in td.text for td in tr.find_all("td"))
-        or "tableHeading" in tr.get("class", [])
+        for tr in tr_list
+        if (
+            tr.get("class")
+            and (
+                any(course in td.text for td in tr.find_all("td"))
+                or "tableHeading" in tr.get("class")
+            )
+        )
     ]
 
     return matching_rows
@@ -51,6 +78,7 @@ def extract_semester_num(description):
         "seventh": 7,
         "eighth": 8,
         "ninth": 9,
+        "tenth": 10,
     }
 
     words = description.lower().split()
@@ -125,25 +153,46 @@ def process_data(tables_data):
     return final_variable
 
 
-tables_data = extract_tables(url)
-final_variable = process_data(tables_data)
+tables_rows = extract_rows(url)
+course_data = search_course(tables_rows, "")
+processed_course_data = process_data(course_data)
 
 
 @app.route("/")
 def index():
+    # Check if at least one entry has a non-empty 'notifications'
+    has_notifications = any(item.get("notifications") for item in processed_course_data)
+
     return render_template(
-        "table.html", data=final_variable, course=None, course_map=course_map
+        "table.html",
+        data=processed_course_data,
+        course="all",
+        course_map=course_map,
+        has_notifications=has_notifications,
     )
 
 
 @app.route("/course/<course>")
 def show_course_notifications(course):
     course_string = convert_course_string(course)
-    tables_data = extract_tables(url, course_string)
-    final_variable = process_data(tables_data)
+    course_data = search_course(tables_rows, course_string)
+    processed_course_data = process_data(course_data)
+
+    # Check if at least one entry has a non-empty 'notifications'
+    has_notifications = any(item.get("notifications") for item in processed_course_data)
+
     return render_template(
-        "table.html", data=final_variable, course=course, course_map=course_map
+        "table.html",
+        data=processed_course_data,
+        course=course,
+        course_map=course_map,
+        has_notifications=has_notifications,
     )
+
+
+@app.route("/course/")
+def no_course_redirect():
+    return redirect("/course/all")
 
 
 if __name__ == "__main__":
