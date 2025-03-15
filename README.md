@@ -20,7 +20,7 @@ pip install -r requirements.txt
 python3 api/index.py
 ```
 
-The website is now available at `http://localhost:5000`
+The website is now available at `http://localhost:8080`
 
 ## One-Click Deploy
 

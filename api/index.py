@@ -1,11 +1,8 @@
 from urllib.request import urlopen
 
-from flask import Flask, redirect, render_template
+from bottle import Bottle, Jinja2Template, redirect, static_file, template
 from selectolax.parser import HTMLParser
 
-app = Flask(__name__)
-
-url = "https://exams.keralauniversity.ac.in/Login/check1"
 course_map = {
     "bsc": "B.Sc",
     "bdes": "B.Des",
@@ -186,6 +183,10 @@ def get_course_data(course):
     return process_data(course_data)
 
 
+app = Bottle()
+TEMPLATE_PATH = "api/templates/table.html"
+STATIC_PATH = "api/static"
+url = "https://exams.keralauniversity.ac.in/Login/check1"
 tables_rows = extract_rows(url)
 
 
@@ -198,8 +199,14 @@ def index():
 def show_course_notifications(course):
     processed_course_data = get_course_data(course)
 
-    return render_template(
-        "table.html",
+    # Read the template file content
+    with open(TEMPLATE_PATH, "r", encoding="utf-8") as file:
+        template_content = file.read()
+
+    # Render using Jinja2Template with raw template content
+    template = Jinja2Template(template_content)
+
+    return template.render(
         data=processed_course_data,
         course=course,
         course_map=course_map,
@@ -209,9 +216,13 @@ def show_course_notifications(course):
     )
 
 
-@app.route("/course/")
-def no_course_redirect():
-    return redirect("/course/all")
+for route in ["/course", "/course/"]:
+    app.route(route)(lambda: redirect("/course/all"))
+
+
+@app.route("/static/<filepath:path>")
+def server_static(filepath):
+    return static_file(filepath, root=STATIC_PATH)
 
 
 if __name__ == "__main__":
