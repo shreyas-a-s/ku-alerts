@@ -181,40 +181,32 @@ def process_data(tables_data):
     return final_variable
 
 
+def get_course_data(course):
+    course_string = convert_course_string(course) if course else ""
+    course_data = search_course(tables_rows, course_string)
+    return process_data(course_data)
+
+
 tables_rows = extract_rows(url)
-course_data = search_course(tables_rows, "")
-processed_course_data = process_data(course_data)
 
 
 @app.route("/")
 def index():
-    # Check if at least one entry has a non-empty 'notifications'
-    has_notifications = any(item.get("notifications") for item in processed_course_data)
-
-    return render_template(
-        "table.html",
-        data=processed_course_data,
-        course="all",
-        course_map=course_map,
-        has_notifications=has_notifications,
-    )
+    return show_course_notifications("all")  # Reuse the route
 
 
 @app.route("/course/<course>")
 def show_course_notifications(course):
-    course_string = convert_course_string(course)
-    course_data = search_course(tables_rows, course_string)
-    processed_course_data = process_data(course_data)
-
-    # Check if at least one entry has a non-empty 'notifications'
-    has_notifications = any(item.get("notifications") for item in processed_course_data)
+    processed_course_data = get_course_data(course)
 
     return render_template(
         "table.html",
         data=processed_course_data,
         course=course,
         course_map=course_map,
-        has_notifications=has_notifications,
+        has_notifications=any(
+            item.get("notifications") for item in processed_course_data
+        ),
     )
 
 
