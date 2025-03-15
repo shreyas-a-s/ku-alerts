@@ -104,12 +104,12 @@ def extract_semester_num(description):
         "tenth": 10,
     }
 
-    words = description.lower().split()
-    for word in words:
-        if word in number_map:
-            return number_map[word]  # Return first detected number
+    description = " ".join(description.lower().split())
+    found_numbers = [
+        str(number_map[key]) for key in number_map if key + " semester" in description
+    ]
 
-    return "-"
+    return ",".join(found_numbers) if found_numbers else "-"
 
 
 def process_data(tables_data):
