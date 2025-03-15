@@ -1,4 +1,5 @@
-import requests
+from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
 from flask import Flask, redirect, render_template
 
@@ -59,12 +60,10 @@ def convert_course_string(course):
 
 def extract_rows(url):
     # Fetch webpage content
-    response = requests.get(url)
-    if response.status_code != 200:
-        print(f"Failed to retrieve the page. Status code: {response.status_code}")
-        return []
+    html = urlopen(url).read()
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    # Parse html using soup
+    soup = BeautifulSoup(html, "html.parser")
 
     # Find all the tr inside the div with id 'wrapper'
     tr_list = soup.find("div", id="wrapper").find_all("tr")
