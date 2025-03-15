@@ -171,6 +171,10 @@ td.no-data {
 		color: #333;
 	}
 
+	.pdf-link svg {
+		fill: #4aa94a;
+	}
+
 	th {
 		background-color: #f4f4f4;
 	}
