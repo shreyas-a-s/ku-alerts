@@ -104,12 +104,12 @@ def extract_semester_num(description):
         "tenth": 10,
     }
 
-    normalized_description = " ".join(description.lower().split())
+    normalized_description = description.lower().replace(" ", "")
     found_numbers = [
         str(number_map[key])
         for key in number_map
-        if f"{key} semester" in normalized_description
-        or f"{key} and" in normalized_description
+        if f"{key}semester" in normalized_description
+        or f"{key}and" in normalized_description
     ]
 
     return ",".join(found_numbers) if found_numbers else "-"
