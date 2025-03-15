@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 
-from bs4 import BeautifulSoup
 from flask import Flask, redirect, render_template
+from selectolax.parser import HTMLParser
 
 app = Flask(__name__)
 
@@ -60,28 +60,31 @@ def convert_course_string(course):
 
 def extract_rows(url):
     # Fetch webpage content
-    html = urlopen(url).read()
+    html = urlopen(url).read().decode("utf-8")
 
-    # Parse html using soup
-    soup = BeautifulSoup(html, "html.parser")
+    # Parse HTML with selectolax
+    tree = HTMLParser(html)
 
-    # Find all the tr inside the div with id 'wrapper'
-    tr_list = soup.find("div", id="wrapper").find_all("tr")
+    # Find all <tr> elements inside <div id="wrapper">
+    tr_list = tree.css("div#wrapper tr")
 
-    return tr_list
+    # Extract text from each row
+    rows = [tr for tr in tr_list]
+    print(td for td in tr_list[0].css("td"))
+
+    return rows  # Returns a list of row text contents
 
 
 def search_course(tr_list, course=""):
-
     # Find all <tr> elements that either contain the substring "course" or have a class of "tableHeading"
     matching_rows = [
         tr
         for tr in tr_list
         if (
-            tr.get("class")
+            tr.attributes.get("class")
             and (
-                any(course in td.text for td in tr.find_all("td"))
-                or "tableHeading" in tr.get("class")
+                any(course in td.text() for td in tr.css("td"))
+                or "tableHeading" in tr.attributes.get("class")
             )
         )
     ]
@@ -121,7 +124,7 @@ def process_data(tables_data):
 
     for tr in tables_data:
         # Check if the row is a table heading (contains the published date)
-        if "tableHeading" in tr.get("class", []):
+        if "tableHeading" in tr.attributes.get("class"):
             # If there is an existing group of notifications, save them
             if current_published_date:
                 final_variable.append(
@@ -133,7 +136,7 @@ def process_data(tables_data):
                 )
 
             # Extract the published date from the first <td>
-            published_date = tr.find("td").get_text(strip=True).split()[2]
+            published_date = tr.css("td")[0].text().split()[2]
             published_date = published_date[:-5]
             published_year = f"/{published_date[-2:]}"
             current_published_date = published_date
@@ -141,11 +144,11 @@ def process_data(tables_data):
             notifications = []  # Reset the notifications for the new published date
         else:
             # Process rows with notification data
-            tds = tr.find_all("td")
+            tds = tr.css("td")
 
             # For rows with just one <td> (description only)
             if len(tds) == 1:
-                description = tds[0].get_text(strip=True)
+                description = tds[0].text()
                 semester_num = extract_semester_num(description)
                 notifications.append(
                     {
@@ -157,10 +160,10 @@ def process_data(tables_data):
             elif (
                 len(tds) >= 2
             ):  # For rows with at least two <td> elements (description and pdf link)
-                description = tds[1].get_text(strip=True)
+                description = tds[1].text()
                 semester_num = extract_semester_num(description)
-                link_tag = tds[2].find("a")  # Find <a> inside the last <td>
-                pdf_link = link_tag["href"] if link_tag else None
+                link_tag = tds[2].css("a")  # Find <a> inside the last <td>
+                pdf_link = link_tag[0].attributes.get("href") if link_tag else None
                 notifications.append(
                     {
                         "description": description,

@@ -1,2 +1,2 @@
 Flask
-beautifulsoup4
+selectolax
