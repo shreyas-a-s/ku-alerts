@@ -70,7 +70,6 @@ def extract_rows(url):
 
     # Extract text from each row
     rows = [tr for tr in tr_list]
-    print(td for td in tr_list[0].css("td"))
 
     return rows  # Returns a list of row text contents
 
