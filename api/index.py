@@ -102,7 +102,6 @@ def extract_semester_num(description):
         "eighth": 8,
         "ninth": 9,
         "tenth": 10,
-        "final": "F",
     }
 
     words = description.lower().split()
