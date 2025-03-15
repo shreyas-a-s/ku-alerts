@@ -79,23 +79,45 @@ td.pdf-link {
 	padding: 0;
 }
 
-@media (min-width: 778px) {
+td.published-date::after {
+	content: attr(data-published-year);
+}
+
+@media (min-width: 550px) and (max-width: 778px) {
 	td.published-date::after {
-		content: attr(data-published-year);
+		content: "";
 	}
 }
+
+@media (max-width: 576px) {
+	td.published-date {
+		writing-mode: vertical-lr;
+		transform: rotate(180deg);
+	}
+}
+
+th.date::before {
+	content: "D"
+}
+
+@media (min-width: 576px) {
+	th.date::before {
+		content: "Date";
+	}
+}
+
 
 td.description {
 	word-break: break-word;
 }
 
 #semester-heading::before {
-	content: "Sem";
+	content: "S";
 }
 
-@media (max-width: 576px) {
+@media (min-width: 576px) {
 	#semester-heading::before {
-		content: "S";
+		content: "Sem";
 	}
 }
 
