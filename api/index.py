@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 
-from bottle import Bottle, Jinja2Template, redirect, static_file, template
+from bottle import Bottle, Jinja2Template, redirect, static_file
 from selectolax.parser import HTMLParser
 
 course_map = {
