@@ -198,6 +198,31 @@ td.no-data {
 	text-align: center;
 }
 
+.tooltip {
+	position: relative;
+}
+
+.tooltip-text {
+	visibility: hidden;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 10px;
+	border-radius: 2px;
+	position: absolute;
+	bottom: -100%;
+	left: 50%;
+	transform: translateX(-50%);
+	white-space: nowrap;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+	visibility: visible;
+	opacity: 1;
+}
+
 /* Light Theme (Only When User Prefers It) */
 @media (prefers-color-scheme: light) {
 	body {
