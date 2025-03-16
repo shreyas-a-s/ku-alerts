@@ -21,7 +21,7 @@
 			<select class="styled-select" id="course-select">
 				<option value="all">All Courses</option>
 				% for key, value in course_map.items():
-					<option value="{{ key }}" {{ key == course and "selected" }}>{{ value }}</option>
+					<option value="{{ key }}" {{ key == course and "selected" }}>{{ value["title"] }}</option>
 				% end
 			</select>
 		</div>

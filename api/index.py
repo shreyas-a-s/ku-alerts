@@ -4,55 +4,55 @@ from bottle import Bottle, redirect, static_file, template
 from selectolax.parser import HTMLParser
 
 course_map = {
-    "bsc": "B.Sc",
-    "bdes": "B.Des",
-    "bped": "B.P.Ed",
-    "bvoc": "B.Voc",
-    "ba": "B.A.",
-    "barch": "B.Arch",
-    "bba": "BBA",
-    "bca": "BCA",
-    "bcom": "B.Com",
-    "bed": "B.Ed",
-    "bfa": "BFA",
-    "bhm": "BHM",
-    "bhmct": "BHMCT",
-    "bms": "BMS",
-    "bpa": "BPA",
-    "bpes": "BPES",
-    "bsw": "BSW",
-    "btech": "B.Tech",
-    "llb": "LL.B",
-    "llm": "LLM",
-    "mdes": "M.Des",
-    "med": "M.Ed",
-    "ma": "M.A.",
-    "march": "M.Arch",
-    "mba": "MBA",
-    "mca": "MCA",
-    "mcj": "MCJ",
-    "mcom": "M.Com",
-    "mfa": "MFA",
-    "mliblsc": "MLiblSc",
-    "mlisc": "MLISc",
-    "mpa": "MPA",
-    "mped": "M.P.Ed",
-    "mpes": "MPES",
-    "mplan": "MPlan",
-    "msc": "M.Sc",
-    "msw": "MSW",
-    "mta": "MTA",
-    "mtech": "M.Tech",
-    "mttm": "MTTM",
-    "mva": "MVA",
+    "bsc": {"title": "B.Sc", "keywords": ["B.Sc"]},
+    "bdes": {"title": "B.Des", "keywords": ["B.Des"]},
+    "bped": {"title": "B.P.Ed", "keywords": ["B.P.Ed"]},
+    "bvoc": {"title": "B.Voc", "keywords": ["B.Voc"]},
+    "ba": {"title": "B.A.", "keywords": ["B.A."]},
+    "barch": {"title": "B.Arch", "keywords": ["B.Arch"]},
+    "bba": {"title": "BBA", "keywords": ["BBA"]},
+    "bca": {"title": "BCA", "keywords": ["BCA"]},
+    "bcom": {"title": "B.Com", "keywords": ["B.Com"]},
+    "bed": {"title": "B.Ed", "keywords": ["B.Ed"]},
+    "bfa": {"title": "BFA", "keywords": ["BFA"]},
+    "bhm": {"title": "BHM", "keywords": ["BHM"]},
+    "bhmct": {"title": "BHMCT", "keywords": ["BHMCT"]},
+    "bms": {"title": "BMS", "keywords": ["BMS"]},
+    "bpa": {"title": "BPA", "keywords": ["BPA"]},
+    "bpes": {"title": "BPES", "keywords": ["BPES"]},
+    "bsw": {"title": "BSW", "keywords": ["BSW"]},
+    "btech": {"title": "B.Tech", "keywords": ["B.Tech"]},
+    "llb": {"title": "LL.B", "keywords": ["LLB", "LL.B"]},
+    "llm": {"title": "LLM", "keywords": ["LLM", "LL.M"]},
+    "mdes": {"title": "M.Des", "keywords": ["M.Des"]},
+    "med": {"title": "M.Ed", "keywords": ["M.Ed"]},
+    "ma": {"title": "M.A.", "keywords": ["M.A."]},
+    "march": {"title": "M.Arch", "keywords": ["M.Arch"]},
+    "mba": {"title": "MBA", "keywords": ["MBA"]},
+    "mca": {"title": "MCA", "keywords": ["MCA"]},
+    "mcj": {"title": "MCJ", "keywords": ["MCJ"]},
+    "mcom": {"title": "M.Com", "keywords": ["M.Com"]},
+    "mfa": {"title": "MFA", "keywords": ["MFA"]},
+    "mliblsc": {"title": "MLiblSc", "keywords": ["MLiblSc"]},
+    "mlisc": {"title": "MLISc", "keywords": ["MLISc"]},
+    "mpa": {"title": "MPA", "keywords": ["MPA"]},
+    "mped": {"title": "M.P.Ed", "keywords": ["M.P.Ed"]},
+    "mpes": {"title": "MPES", "keywords": ["MPES"]},
+    "mplan": {"title": "MPlan", "keywords": ["MPlan"]},
+    "msc": {"title": "M.Sc", "keywords": ["M.Sc"]},
+    "msw": {"title": "MSW", "keywords": ["MSW"]},
+    "mta": {"title": "MTA", "keywords": ["MTA"]},
+    "mtech": {"title": "M.Tech", "keywords": ["M.Tech"]},
+    "mttm": {"title": "MTTM", "keywords": ["MTTM"]},
+    "mva": {"title": "MVA", "keywords": ["MVA"]},
 }
 
 
-def convert_course_string(course):
+def convert_course_keywords(course):
     if course.lower() in course_map:
-        return course_map[course.lower()]
+        return course_map[course.lower()]["keywords"]
 
-    return ""
+    return [""]
 
 
 def extract_rows(url):
@@ -71,15 +71,18 @@ def extract_rows(url):
     return rows  # Returns a list of row text contents
 
 
-def search_course(tr_list, course=""):
-    # Find all <tr> elements that either contain the substring "course" or have a class of "tableHeading"
+def search_course(tr_list, course_keywords=[]):
+    # Find all <tr> elements that either contain the any of the course keywords or have a class of "tableHeading"
     matching_rows = [
         tr
         for tr in tr_list
         if (
             tr.attributes.get("class")
             and (
-                any(course in td.text() for td in tr.css("td"))
+                any(
+                    any(keyword in td.text() for keyword in course_keywords)
+                    for td in tr.css("td")
+                )
                 or "tableHeading" in tr.attributes.get("class")
             )
         )
@@ -182,8 +185,8 @@ def process_data(tables_data):
 
 
 def get_course_data(course):
-    course_string = convert_course_string(course) if course else ""
-    course_data = search_course(tables_rows, course_string)
+    course_keywords = convert_course_keywords(course) if course else [""]
+    course_data = search_course(tables_rows, course_keywords)
     return process_data(course_data)
 
 
