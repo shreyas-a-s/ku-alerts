@@ -244,6 +244,7 @@ def show_course_timetable(course):
         course=course,
         course_map=course_map,
         page_type="timetable",
+        page_title="Time Table",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
         ),
@@ -264,6 +265,7 @@ def show_course_notifications(course):
         course=course,
         course_map=course_map,
         page_type="notification",
+        page_title="Notifications",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
         ),
