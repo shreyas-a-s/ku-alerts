@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 
-from bottle import Bottle, Jinja2Template, redirect, static_file
+from bottle import Bottle, redirect, static_file, template
 from selectolax.parser import HTMLParser
 
 course_map = {
@@ -203,14 +203,8 @@ def index():
 def show_course_notifications(course):
     processed_course_data = get_course_data(course)
 
-    # Read the template file content
-    with open(TEMPLATE_PATH, "r", encoding="utf-8") as file:
-        template_content = file.read()
-
-    # Render using Jinja2Template with raw template content
-    template = Jinja2Template(template_content)
-
-    return template.render(
+    return template(
+        TEMPLATE_PATH,
         data=processed_course_data,
         course=course,
         course_map=course_map,
