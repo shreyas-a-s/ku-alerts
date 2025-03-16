@@ -155,9 +155,15 @@ td.description {
 	}
 }
 
+@media (min-width: 576px) {
+	#pdf-heading::after {
+		content: "DF";
+	}
+}
+
 .pdf-link a {
 	display: inline-block;
-	padding: 5px;
+	padding: 5px 8px;
 	color: #90ee90;
 	text-align: center;
 }
