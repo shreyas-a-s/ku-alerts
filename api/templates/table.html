@@ -99,17 +99,19 @@
 	</table>
 
 	<script>
-		const path = window.location.pathname;
+		document.addEventListener("DOMContentLoaded", () => {
+			const path = window.location.pathname;
 
-		if (path.startsWith("/timetable/")) {
-			document.getElementById("course-select").onchange = function () {
-				location.href = "/timetable/" + this.value
+			if (path.startsWith("/timetable/")) {
+				document.getElementById("course-select").onchange = function () {
+					location.href = "/timetable/" + this.value
+				}
+			} else {
+				document.getElementById("course-select").onchange = function () {
+					location.href = "/course/" + this.value
+				}
 			}
-		} else {
-			document.getElementById("course-select").onchange = function () {
-				location.href = "/course/" + this.value
-			}
-		}
+		});
 	</script>
 </body>
 
