@@ -171,7 +171,11 @@ def process_data(tables_data):
     # Don't forget to append the last set of notifications after the loop
     if current_published_date:
         final_variable.append(
-            {"published_date": current_published_date, "notifications": notifications}
+            {
+                "published_date": current_published_date,
+                "published_year": current_published_year,
+                "notifications": notifications,
+            }
         )
 
     return final_variable
