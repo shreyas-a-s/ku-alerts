@@ -17,6 +17,40 @@ header {
 	justify-content: space-between;
 }
 
+header div {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+header a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	border: 1px solid #444;
+	padding: 10px;
+}
+
+header a:not(:first-of-type) {
+	height: 18px;
+	width: 18px;
+}
+
+header a:hover {
+	border-color: #90ee90;
+}
+
+header a:focus {
+	border-color: #90ee90;
+	box-shadow: 0 0 5px #90ee90;
+}
+
+header a svg {
+	width: 15px;
+	fill: #e0e0e0;
+}
+
 .dropdown-container {
 	display: flex;
 	justify-content: center;

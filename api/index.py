@@ -1,3 +1,4 @@
+import re
 from urllib.request import urlopen
 
 from bottle import Bottle, redirect, static_file, template
@@ -47,6 +48,31 @@ course_map = {
     "mttm": {"title": "MTTM", "keywords": ["MTTM"]},
     "mva": {"title": "MVA", "keywords": ["MVA"]},
 }
+
+abbreviations = {
+    keyword
+    for course in course_map.values()
+    for keyword in course["keywords"]
+    if keyword
+}
+
+
+def tokenize_text(text):
+    pattern = re.compile(r"(?:\w+\.)+\w+|\w+|\s+|[^\w\s]")
+    return pattern.findall(text)
+
+
+def custom_title_case(text):
+    tokens = tokenize_text(text)
+
+    def process_token(token):
+        if token in abbreviations:
+            return token  # Keep abbreviations as they are
+        elif token.isalpha():
+            return token.title()  # Title case other words
+        return token  # Keep spaces and punctuation unchanged
+
+    return "".join(process_token(token) for token in tokens)
 
 
 def convert_course_keywords(course):
@@ -152,7 +178,7 @@ def process_data(tables_data):
                 semester_num = extract_semester_num(description)
                 notifications.append(
                     {
-                        "description": description,
+                        "description": custom_title_case(description),
                         "semester_num": semester_num,
                         "pdf_link": None,
                     }
@@ -166,7 +192,7 @@ def process_data(tables_data):
                 pdf_link = link_tag[0].attributes.get("href") if link_tag else None
                 notifications.append(
                     {
-                        "description": description,
+                        "description": custom_title_case(description),
                         "semester_num": semester_num,
                         "pdf_link": pdf_link,
                     }
@@ -185,17 +211,22 @@ def process_data(tables_data):
     return final_variable
 
 
-def get_course_data(course):
+def get_course_data(course, datatype="notification"):
     course_keywords = convert_course_keywords(course) if course else [""]
-    course_data = search_course(tables_rows, course_keywords)
+    course_data = search_course(
+        notifications_data if datatype == "notification" else timetable_data,
+        course_keywords,
+    )
     return process_data(course_data)
 
 
 app = Bottle()
 TEMPLATE_PATH = "api/templates/table.html"
 STATIC_PATH = "api/static"
-url = "https://exams.keralauniversity.ac.in/Login/check1"
-tables_rows = extract_rows(url)
+notifications_url = "https://exams.keralauniversity.ac.in/Login/check1"
+timetable_url = "https://exams.keralauniversity.ac.in/Login/check3"
+notifications_data = extract_rows(notifications_url)
+timetable_data = extract_rows(timetable_url)
 
 
 @app.route("/")
@@ -203,15 +234,36 @@ def index():
     return show_course_notifications("all")  # Reuse the route
 
 
-@app.route("/course/<course>")
-def show_course_notifications(course):
-    processed_course_data = get_course_data(course)
+@app.route("/timetable/<course>")
+def show_course_timetable(course):
+    processed_course_data = get_course_data(course, "timetable")
 
     return template(
         TEMPLATE_PATH,
         data=processed_course_data,
         course=course,
         course_map=course_map,
+        page_type="timetable",
+        has_notifications=any(
+            item.get("notifications") for item in processed_course_data
+        ),
+    )
+
+
+for route in ["/timetable", "/timetable/"]:
+    app.route(route)(lambda: redirect("/timetable/all"))
+
+
+@app.route("/course/<course>")
+def show_course_notifications(course):
+    processed_course_data = get_course_data(course, "notification")
+
+    return template(
+        TEMPLATE_PATH,
+        data=processed_course_data,
+        course=course,
+        course_map=course_map,
+        page_type="notification",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
         ),
