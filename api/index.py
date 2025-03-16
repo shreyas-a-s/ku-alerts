@@ -98,7 +98,7 @@ def extract_rows(url):
     return rows  # Returns a list of row text contents
 
 
-def search_course(tr_list, course_keywords=[]):
+def search_course(tr_list, course_keywords=[""]):
     # Find all <tr> elements that either contain the any of the course keywords or have a class of "tableHeading"
     matching_rows = [
         tr
@@ -211,10 +211,17 @@ def process_data(tables_data):
     return final_variable
 
 
-def get_course_data(course, datatype="notification"):
+def get_course_data(course, datatype="notifications"):
     course_keywords = convert_course_keywords(course) if course else [""]
+    input_data = notifications_data
+
+    if datatype == "timetable":
+        input_data = timetable_data
+    elif datatype == "results":
+        input_data = results_data
+
     course_data = search_course(
-        notifications_data if datatype == "notification" else timetable_data,
+        input_data,
         course_keywords,
     )
     return process_data(course_data)
@@ -225,8 +232,10 @@ TEMPLATE_PATH = "api/templates/table.html"
 STATIC_PATH = "api/static"
 notifications_url = "https://exams.keralauniversity.ac.in/Login/check1"
 timetable_url = "https://exams.keralauniversity.ac.in/Login/check3"
+results_url = "https://exams.keralauniversity.ac.in/Login/check8"
 notifications_data = extract_rows(notifications_url)
 timetable_data = extract_rows(timetable_url)
+results_data = extract_rows(results_url)
 
 
 @app.route("/")
@@ -243,7 +252,6 @@ def show_course_timetable(course):
         data=processed_course_data,
         course=course,
         course_map=course_map,
-        page_type="timetable",
         page_title="Time Table",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
@@ -257,14 +265,13 @@ for route in ["/timetable", "/timetable/"]:
 
 @app.route("/course/<course>")
 def show_course_notifications(course):
-    processed_course_data = get_course_data(course, "notification")
+    processed_course_data = get_course_data(course, "notifications")
 
     return template(
         TEMPLATE_PATH,
         data=processed_course_data,
         course=course,
         course_map=course_map,
-        page_type="notification",
         page_title="Notifications",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
@@ -274,6 +281,26 @@ def show_course_notifications(course):
 
 for route in ["/course", "/course/"]:
     app.route(route)(lambda: redirect("/course/all"))
+
+
+@app.route("/results/<course>")
+def show_course_results(course):
+    processed_course_data = get_course_data(course, "results")
+
+    return template(
+        TEMPLATE_PATH,
+        data=processed_course_data,
+        course=course,
+        course_map=course_map,
+        page_title="Results",
+        has_notifications=any(
+            item.get("notifications") for item in processed_course_data
+        ),
+    )
+
+
+for route in ["/results", "/results/"]:
+    app.route(route)(lambda: redirect("/results/all"))
 
 
 @app.route("/static/<filepath:path>")

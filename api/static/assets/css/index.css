@@ -11,6 +11,10 @@ h2 {
 	margin: 0;
 }
 
+span:empty {
+	display: none;
+}
+
 header {
 	display: flex;
 	align-items: center;
@@ -32,11 +36,6 @@ header a {
 	padding: 10px;
 }
 
-header a:not(:first-of-type) {
-	height: 18px;
-	width: 18px;
-}
-
 header a:hover {
 	border-color: #90ee90;
 }
@@ -49,6 +48,17 @@ header a:focus {
 header a svg {
 	width: 15px;
 	fill: #8b8b8b;
+}
+
+header a:not(:first-of-type) svg {
+	width: 18px;
+	height: 18px;
+}
+
+@media (max-width: 430px) {
+	header a span.text {
+		display: none;
+	}
 }
 
 .dropdown-container {
