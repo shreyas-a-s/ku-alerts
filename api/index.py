@@ -263,7 +263,7 @@ for route in ["/timetable", "/timetable/"]:
     app.route(route)(lambda: redirect("/timetable/all"))
 
 
-@app.route("/course/<course>")
+@app.route("/notifications/<course>")
 def show_course_notifications(course):
     processed_course_data = get_course_data(course, "notifications")
 
@@ -279,8 +279,8 @@ def show_course_notifications(course):
     )
 
 
-for route in ["/course", "/course/"]:
-    app.route(route)(lambda: redirect("/course/all"))
+for route in ["/notifications", "/notifications/"]:
+    app.route(route)(lambda: redirect("/notifications/all"))
 
 
 @app.route("/results/<course>")
