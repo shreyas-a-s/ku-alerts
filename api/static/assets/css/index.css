@@ -48,7 +48,7 @@ header a:focus {
 
 header a svg {
 	width: 15px;
-	fill: #e0e0e0;
+	fill: #8b8b8b;
 }
 
 .dropdown-container {
@@ -65,7 +65,7 @@ header a svg {
 	outline: none;
 	appearance: none;
 	cursor: pointer;
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23555' d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%238b8b8b' d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 12px center;
 	background-size: 14px;
@@ -189,6 +189,7 @@ td.no-data {
 		color: #333;
 	}
 
+	header a,
 	.styled-select {
 		border: 1px solid #ddd;
 		background-color: #fff;
