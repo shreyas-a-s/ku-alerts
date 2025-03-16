@@ -4,6 +4,7 @@ from bottle import Bottle, redirect, static_file, template
 from selectolax.parser import HTMLParser
 
 course_map = {
+    "all": {"title": "All Courses", "keywords": [""]},
     "bsc": {"title": "B.Sc", "keywords": ["B.Sc"]},
     "bdes": {"title": "B.Des", "keywords": ["B.Des"]},
     "bped": {"title": "B.P.Ed", "keywords": ["B.P.Ed"]},
