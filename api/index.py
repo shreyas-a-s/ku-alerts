@@ -132,9 +132,9 @@ def process_data(tables_data):
                 )
 
             # Extract the published date from the first <td>
-            published_date = tr.css("td")[0].text().split()[2]
-            published_date = published_date[:-5]
-            published_year = f"/{published_date[-2:]}"
+            published_date_full = tr.css("td")[0].text().split()[2]
+            published_date = published_date_full[:-5]
+            published_year = f"/{published_date_full[-2:]}"
             current_published_date = published_date
             current_published_year = published_year
             notifications = []  # Reset the notifications for the new published date
