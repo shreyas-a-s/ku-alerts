@@ -140,6 +140,14 @@ td.published-date::after {
 	}
 }
 
+@media (max-width: 576px) {
+	td.semester-num {
+		max-width: 2ch;
+		text-align: center;
+		word-wrap: break-word;
+	}
+}
+
 th.date::before {
 	content: "D"
 }
