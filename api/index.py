@@ -211,7 +211,7 @@ def process_data(tables_data):
     return final_variable
 
 
-def get_course_data(course, datatype="notifications"):
+def filter_course_data(course, datatype="notifications"):
     course_keywords = convert_course_keywords(course) if course else [""]
     input_data = notifications_data
 
@@ -245,7 +245,7 @@ def index():
 
 @app.route("/timetable/<course>")
 def show_course_timetable(course):
-    processed_course_data = get_course_data(course, "timetable")
+    processed_course_data = filter_course_data(course, "timetable")
 
     return template(
         TEMPLATE_PATH,
@@ -265,7 +265,7 @@ for route in ["/timetable", "/timetable/"]:
 
 @app.route("/notifications/<course>")
 def show_course_notifications(course):
-    processed_course_data = get_course_data(course, "notifications")
+    processed_course_data = filter_course_data(course, "notifications")
 
     return template(
         TEMPLATE_PATH,
@@ -285,7 +285,7 @@ for route in ["/notifications", "/notifications/"]:
 
 @app.route("/results/<course>")
 def show_course_results(course):
-    processed_course_data = get_course_data(course, "results")
+    processed_course_data = filter_course_data(course, "results")
 
     return template(
         TEMPLATE_PATH,
