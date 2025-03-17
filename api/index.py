@@ -132,7 +132,7 @@ def extract_semester_num(description):
         "tenth": 10,
     }
 
-    normalized_description = description.lower().replace(" ", "")
+    normalized_description = re.sub(r"\s+", "", description.lower())
     found_numbers = [
         str(number_map[key])
         for key in number_map
