@@ -37,7 +37,12 @@ header a {
 }
 
 header a:hover {
+	color: #90ee90;
 	border-color: #90ee90;
+}
+
+header a:hover svg {
+	fill: #90ee90;
 }
 
 header a:focus {
@@ -84,6 +89,7 @@ header a:not(:first-of-type) svg {
 
 .styled-select:hover {
 	border-color: #90ee90;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%2390ee90' d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
 }
 
 .styled-select:focus {
@@ -174,14 +180,20 @@ td.description {
 .pdf-link a {
 	display: inline-block;
 	padding: 5px 8px;
-	color: #90ee90;
 	text-align: center;
+}
+
+.pdf-link a svg {
+	fill: #8b8b8b;
+}
+
+.pdf-link a:hover svg {
+	fill: #90ee90;
 }
 
 .pdf-link svg {
 	width: 20px;
 	height: 20px;
-	fill: #90ee90;
 }
 
 th {
@@ -212,6 +224,20 @@ td.no-data {
 		color: #333;
 	}
 
+	header a:hover {
+		color: #4aa94a;
+		border-color: #4aa94a;
+	}
+
+	header a:hover svg {
+		fill: #4aa94a;
+	}
+
+	.styled-select:hover {
+		border-color: #4aa94a;
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%234aa94a' d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
+	}
+
 	table {
 		background-color: #fff;
 	}
@@ -222,7 +248,7 @@ td.no-data {
 		color: #333;
 	}
 
-	.pdf-link svg {
+	.pdf-link a:hover svg {
 		fill: #4aa94a;
 	}
 
