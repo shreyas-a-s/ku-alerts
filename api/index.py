@@ -4,6 +4,12 @@ from urllib.request import urlopen
 from bottle import Bottle, redirect, static_file, template
 from selectolax.parser import HTMLParser
 
+category_map = {
+    "timetables": "Timetables",
+    "notifications": "Notifications",
+    "results": "Results",
+}
+
 course_map = {
     "all": {"title": "All Courses", "keywords": [""]},
     "bsc": {"title": "B.Sc", "keywords": ["B.Sc"]},
@@ -215,8 +221,8 @@ def filter_course_data(course, datatype="notifications"):
     course_keywords = convert_course_keywords(course) if course else [""]
     input_data = notifications_data
 
-    if datatype == "timetable":
-        input_data = timetable_data
+    if datatype == "timetables":
+        input_data = timetables_data
     elif datatype == "results":
         input_data = results_data
 
@@ -231,76 +237,42 @@ app = Bottle()
 TEMPLATE_PATH = "api/templates/table.html"
 STATIC_PATH = "api/static"
 notifications_url = "https://exams.keralauniversity.ac.in/Login/check1"
-timetable_url = "https://exams.keralauniversity.ac.in/Login/check3"
+timetables_url = "https://exams.keralauniversity.ac.in/Login/check3"
 results_url = "https://exams.keralauniversity.ac.in/Login/check8"
 notifications_data = extract_rows(notifications_url)
-timetable_data = extract_rows(timetable_url)
+timetables_data = extract_rows(timetables_url)
 results_data = extract_rows(results_url)
 
 
 @app.route("/")
 def index():
-    return show_course_notifications("all")  # Reuse the route
+    return show_course_data("notifications", "all")  # Default to notifications
 
 
-@app.route("/timetable/<course>")
-def show_course_timetable(course):
-    processed_course_data = filter_course_data(course, "timetable")
+# Generalized function for timetables, notifications, and results
+@app.route("/<category>/<course>")
+def show_course_data(category, course):
+    if category not in category_map:
+        category = "notifications"
 
-    return template(
-        TEMPLATE_PATH,
-        data=processed_course_data,
-        course=course,
-        course_map=course_map,
-        page_title="Time Tables",
-        has_notifications=any(
-            item.get("notifications") for item in processed_course_data
-        ),
-    )
-
-
-for route in ["/timetable", "/timetable/"]:
-    app.route(route)(lambda: redirect("/timetable/all"))
-
-
-@app.route("/notifications/<course>")
-def show_course_notifications(course):
-    processed_course_data = filter_course_data(course, "notifications")
+    processed_course_data = filter_course_data(course, category)
 
     return template(
         TEMPLATE_PATH,
         data=processed_course_data,
         course=course,
         course_map=course_map,
-        page_title="Notifications",
+        page_title=category_map[category],
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
         ),
     )
 
 
-for route in ["/notifications", "/notifications/"]:
-    app.route(route)(lambda: redirect("/notifications/all"))
-
-
-@app.route("/results/<course>")
-def show_course_results(course):
-    processed_course_data = filter_course_data(course, "results")
-
-    return template(
-        TEMPLATE_PATH,
-        data=processed_course_data,
-        course=course,
-        course_map=course_map,
-        page_title="Results",
-        has_notifications=any(
-            item.get("notifications") for item in processed_course_data
-        ),
-    )
-
-
-for route in ["/results", "/results/"]:
-    app.route(route)(lambda: redirect("/results/all"))
+# Redirects for missing course parameter
+for category in category_map:
+    app.route(f"/{category}")(lambda c=category: redirect(f"/{c}/all"))
+    app.route(f"/{category}/")(lambda c=category: redirect(f"/{c}/all"))
 
 
 @app.route("/static/<filepath:path>")
