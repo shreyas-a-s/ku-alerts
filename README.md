@@ -1,4 +1,4 @@
-# Kerala University Notifications
+# Kerala University Alerts
 
 This is a project aimed at simplifying the notification-viewing experience of Kerala University students .
 
@@ -20,7 +20,7 @@ pip install -r requirements.txt
 python3 api/index.py
 ```
 
-The website is now available at `http://localhost:8080`
+The website is now available at `http://localhost:8080` (the port might be different. Check the terminal window for the correct port number)
 
 ## One-Click Deploy
 
