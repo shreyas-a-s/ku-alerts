@@ -28,7 +28,7 @@
 					<path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zm64 0l0 64 64 0 0-64L64 96zm384 0L192 96l0 64 256 0 0-64zM64 224l0 64 64 0 0-64-64 0zm384 0l-256 0 0 64 256 0 0-64zM64 352l0 64 64 0 0-64-64 0zm384 0l-256 0 0 64 256 0 0-64z"/>
 				</svg>
 
-				<span class="text">{{ page_title if page_title == "Time Table" else "" }}</span>
+				<span class="text">{{ page_title if page_title == "Time Tables" else "" }}</span>
 			</a>
 
 			<a href="/results/{{ course }}">
@@ -87,7 +87,7 @@
 			% else:
 				<tr>
 					<td colspan="4" class="no-data">
-						No New {{ page_title }} Found
+						There are no new {{ page_title.lower() }}.
 					</td>
 				</tr>
 			% end

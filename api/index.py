@@ -252,7 +252,7 @@ def show_course_timetable(course):
         data=processed_course_data,
         course=course,
         course_map=course_map,
-        page_title="Time Table",
+        page_title="Time Tables",
         has_notifications=any(
             item.get("notifications") for item in processed_course_data
         ),
