@@ -1,4 +1,5 @@
 import re
+from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 from bottle import Bottle, redirect, static_file, template
@@ -89,19 +90,30 @@ def convert_course_keywords(course):
 
 
 def extract_rows(url):
-    # Fetch webpage content
-    html = urlopen(url).read().decode("utf-8")
+    try:
+        # Fetch webpage content
+        response = urlopen(url, timeout=10)  # Set a timeout to prevent hanging requests
+        html = response.read().decode("utf-8")
 
-    # Parse HTML with selectolax
-    tree = HTMLParser(html)
+        # Parse HTML with selectolax
+        tree = HTMLParser(html)
 
-    # Find all <tr> elements inside <div id="wrapper">
-    tr_list = tree.css("div#wrapper tr")
+        # Find all <tr> elements inside <div id="wrapper">
+        tr_list = tree.css("div#wrapper tr")
 
-    # Extract text from each row
-    rows = [tr for tr in tr_list]
+        # Extract text from each row
+        return [tr for tr in tr_list]
 
-    return rows  # Returns a list of row text contents
+    except HTTPError as e:
+        print(f"HTTP Error {e.code}: {e.reason}")
+    except URLError as e:
+        print(f"URL Error: {e.reason}")
+    except TimeoutError:
+        print("Request timed out.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
+    return []  # Return an empty list in case of any failure
 
 
 def search_course(tr_list, course_keywords=[""]):
