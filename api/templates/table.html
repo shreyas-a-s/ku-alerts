@@ -96,20 +96,13 @@
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
-			const path = window.location.pathname;
+			const acceptedPaths = ["notifications", "timetables", "results"];
+			const path = location.pathname;
+			const firstSegment = path.split("/")[1];
+			const basePath = firstSegment && acceptedPaths.includes(firstSegment) ? firstSegment : acceptedPaths[0];
 
-			if (path.startsWith("/timetables/")) {
-				document.getElementById("course-select").onchange = function () {
-					location.href = "/timetables/" + this.value
-				}
-			} else if (path.startsWith("/results/")) {
-				document.getElementById("course-select").onchange = function () {
-					location.href = "/results/" + this.value
-				}
-			} else {
-				document.getElementById("course-select").onchange = function () {
-					location.href = "/notifications/" + this.value
-				}
+			document.getElementById("course-select").onchange = function () {
+				location.href = "/" + basePath + "/" + event.target.value;
 			}
 		});
 	</script>
