@@ -2,7 +2,7 @@
 
 This is a project aimed at simplifying the notification-viewing experience of Kerala University students .
 
-This is a website that runs using [Bottle.py](https://github.com/bottlepy/bottle) on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python). It can also be run locally for testing ang checking it out.
+This is a website that runs using [Bottle.py](https://github.com/bottlepy/bottle) on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python). It can also be run locally for testing and checking it out.
 
 ## How it Works
 
