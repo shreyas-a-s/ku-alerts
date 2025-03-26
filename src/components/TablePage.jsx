@@ -9,7 +9,7 @@ const TablePage = () => {
 	const [hasNotifications, setHasNotifications] = useState(false);
 
 	useEffect(() => {
-		fetch(`/${category}/${course}`)
+		fetch(`/api/${category}/${course}`)
 			.then((res) => res.json())
 			.then((json) => {
 				setData(json.data);
