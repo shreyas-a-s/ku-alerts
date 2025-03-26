@@ -254,13 +254,13 @@ timetables_data = extract_rows(timetables_url)
 results_data = extract_rows(results_url)
 
 
-@app.route("/")
+@app.route("/api/")
 def index():
     return show_course_data("notifications", "all")  # Default to notifications
 
 
 # Generalized function for timetables, notifications, and results
-@app.route("/<category>/<course>")
+@app.route("/api/<category>/<course>")
 def show_course_data(category, course):
     if category not in category_map:
         category = "notifications"
@@ -280,8 +280,8 @@ def show_course_data(category, course):
 
 # Redirects for missing course parameter
 for category in category_map:
-    app.route(f"/{category}")(lambda c=category: redirect(f"/{c}/all"))
-    app.route(f"/{category}/")(lambda c=category: redirect(f"/{c}/all"))
+    app.route(f"/api/{category}")(lambda c=category: redirect(f"/{c}/all"))
+    app.route(f"/api/{category}/")(lambda c=category: redirect(f"/{c}/all"))
 
 if __name__ == "__main__":
     app.run()
