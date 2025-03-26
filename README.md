@@ -23,10 +23,20 @@ For hosting this website, I have used the Web Server Gateway Interface (WSGI) wi
 ## Running Locally
 
 ```bash
+# Install react dependencies
+npm install
+
+# Install python dependencies
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
+# Run frontend and backend separately
+npm run dev
 python3 api/index.py
+
+# (or) Run both simultaneously
+npm run dev & python3 api/index.py
 ```
 
 The website is now available at `http://localhost:8080` (the **port** might be different. Check the terminal window for the correct port number)
