@@ -6,8 +6,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<Navigate to="/notifications/all" />} />
         <Route path="/:category/:course" element={<TablePage />} />
+        <Route path="*" element={<Navigate to="/notifications/all" />} />
       </Routes>
     </Router>
   );
