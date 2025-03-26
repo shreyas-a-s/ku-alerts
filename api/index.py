@@ -2,7 +2,7 @@ import re
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
-from bottle import Bottle, redirect, static_file, template
+from bottle import Bottle, redirect
 from selectolax.parser import HTMLParser
 
 category_map = {
@@ -246,8 +246,6 @@ def filter_course_data(course, datatype="notifications"):
 
 
 app = Bottle()
-TEMPLATE_PATH = "api/templates/table.html"
-STATIC_PATH = "api/static"
 notifications_url = "https://exams.keralauniversity.ac.in/Login/check1"
 timetables_url = "https://exams.keralauniversity.ac.in/Login/check3"
 results_url = "https://exams.keralauniversity.ac.in/Login/check8"
@@ -269,28 +267,21 @@ def show_course_data(category, course):
 
     processed_course_data = filter_course_data(course, category)
 
-    return template(
-        TEMPLATE_PATH,
-        data=processed_course_data,
-        course=course,
-        course_map=course_map,
-        page_title=category_map[category],
-        has_notifications=any(
+    return {
+        "data": processed_course_data,
+        "course": course,
+        "course_map": course_map,
+        "page_title": category_map[category],
+        "has_notifications": any(
             item.get("notifications") for item in processed_course_data
         ),
-    )
+    }
 
 
 # Redirects for missing course parameter
 for category in category_map:
     app.route(f"/{category}")(lambda c=category: redirect(f"/{c}/all"))
     app.route(f"/{category}/")(lambda c=category: redirect(f"/{c}/all"))
-
-
-@app.route("/static/<filepath:path>")
-def server_static(filepath):
-    return static_file(filepath, root=STATIC_PATH)
-
 
 if __name__ == "__main__":
     app.run()
