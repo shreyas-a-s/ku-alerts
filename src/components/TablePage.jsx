@@ -12,9 +12,9 @@ const TablePage = () => {
 		fetch(`/api/${category}/${course}`)
 			.then((res) => res.json())
 			.then((json) => {
+				setPageTitle(json.page_title);
 				setData(json.data);
 				setCourseMap(json.course_map);
-				setPageTitle(json.page_title);
 				setHasNotifications(json.has_notifications);
 				document.title = json.page_title + " - Kerala University";
 			})
