@@ -6,9 +6,7 @@ This is a website that runs using [Bottle.py](https://github.com/bottlepy/bottle
 
 ## How it Works
 
-The frontend is built with [React](https://react.dev/) and utilizes [React Router](https://reactrouter.com/) for managing page navigation.
-
-In backend, it scrapes the University webpages using [selectolax](https://github.com/rushter/selectolax) 🕸️, which is a python library that enables easy scraping of html webpages, just like [soup](https://pypi.org/project/beautifulsoup4/)  🍜 which you might know.
+It scrapes the University webpages using [selectolax](https://github.com/rushter/selectolax) 🕸️, which is a python library that enables easy scraping of html webpages, just like [soup](https://pypi.org/project/beautifulsoup4/)  🍜 which you might know.
 
 It parses the table of notifications 📜 to find the latest ones that contain the `course` string and it lists them using a neat-looking table which also contains a link to download each of those notifications  📎.
 
@@ -16,27 +14,20 @@ For hosting this website, I have used the Web Server Gateway Interface (WSGI) wi
 
 ## List of Scraped Web Pages
 
-1. **Notifications** Page - https://exams.keralauniversity.ac.in/Login/check1
-2. **Timetables** Page - https://exams.keralauniversity.ac.in/Login/check3
-3. **Exam Results** Page - https://exams.keralauniversity.ac.in/Login/check8
+1. **Notifications** Page - [Link](https://exams.keralauniversity.ac.in/Login/check1)
+2. **Timetables** Page - [Link](https://exams.keralauniversity.ac.in/Login/check3)
+3. **Exam Results** Page - [Link](https://exams.keralauniversity.ac.in/Login/check8)
 
 ## Running Locally
 
 ```bash
-# Install react dependencies
-npm install
-
 # Install python dependencies
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Run frontend and backend separately
-npm run dev
+# Run website
 python3 api/index.py
-
-# (or) Run both simultaneously
-npm run dev & python3 api/index.py
 ```
 
 The website is now available at `http://localhost:8080` (the **port** might be different. Check the terminal window for the correct port number)
